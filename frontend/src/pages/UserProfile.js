@@ -153,6 +153,23 @@ const UserProfile = () => {
       console.error('Error creating review:', error);
     }
   };
+  const [expandedReviews, setExpandedReviews] = useState({});
+
+
+  const handleExpand = (reviewId) => {
+    setExpandedReviews((prevExpandedReviews) => ({
+      ...prevExpandedReviews,
+      [reviewId]: !prevExpandedReviews[reviewId],
+    }));
+  };
+
+  useState(() => {
+    const initialExpandedReviews = {};
+    reviewData.forEach((review) => {
+      initialExpandedReviews[review._id] = false;
+    });
+    setExpandedReviews(initialExpandedReviews);
+  }, [reviewData]);
 
   return (
     <>
@@ -202,9 +219,23 @@ const UserProfile = () => {
                   <div className="card">
                     <div className="card-body">
                       <h5 className="card-title">{review.userRating}</h5>
-                      <p className="card-text">{review.revContent}</p>
+                      <p className="card-text text-content">
+                      {expandedReviews[review._id] ? review.revContent : `${review.revContent.substring(0, 30)}...`}
+                      {expandedReviews[review._id] && <span className="hidden-content hide">{review.revContent}</span>}
+                      </p> 
+                      
                     </div>
+                    {review.revContent.length > 30 && (
+                  <button
+                    style={{ marginLeft: '10px', width: '40%', fontSize: '12px' }}
+                    onClick={() => handleExpand(review._id)} // Pass the review ID to the handleExpand function
+                    className="expand-link"
+                  >
+                    {expandedReviews[review._id] ? 'Read Less' : 'Read More'} {/* Use the review ID to determine the button text */}
+                  </button>
+                )}
                   </div>
+                  
                 </div>
               ))}
 
