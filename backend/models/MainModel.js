@@ -26,9 +26,18 @@ const reviewSchema = new Schema({
         type: Number,
         required: true
     },
+    revTitle:{
+        type: String,
+    }, 
     revContent:{
         type: String,
         required: true
+    }, 
+    isEdited:{
+        type: Boolean,
+    }, 
+    isResponseEdited:{
+        type: Boolean,
     }, 
     filename:{
         type: String,

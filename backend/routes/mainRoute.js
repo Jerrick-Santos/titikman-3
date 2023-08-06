@@ -9,6 +9,8 @@ const {    getRestos,
     createReview,
     deleteReview,
     updateReview,
+    //newly added
+    updateResto,
     createUser,
     getUser,
     editUser,
@@ -55,6 +57,12 @@ router.get('/resto/search', searchResto)
 router.get('/resto/:id', getResto) //OK
 
 router.post('/restonew', createResto) //OK
+//test
+router.patch('/resto/:id', updateResto) 
+
+//COOKIES 
+
+router.get('/userid',)
 
 
 // TEST ROUTES 

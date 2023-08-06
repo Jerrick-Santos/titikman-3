@@ -29,6 +29,7 @@ const ReviewCard = (props) => {
   else{
   var responseDatePosted = (props.responseDatePosted)
   }
+
   
   const handleDelete = async () => {
     try {
@@ -142,7 +143,8 @@ const ReviewCard = (props) => {
                     <div className="d-flex justify-content-end">
                     
 
-                    <EditReviewModal restoID={props.restoID} reviewID={props.reviewID}/>
+                    <EditReviewModal restoID={props.restoID} reviewID={props.reviewID} userRating={props.userRating}
+                                    revContent={props.revContent} revTitle={props.revTitle}/>
 
                     <button type="button" className="btn btn-outline-danger btn-sm" onClick={handleDelete}>
                         Delete
@@ -179,16 +181,27 @@ const ReviewCard = (props) => {
         </div>
         <div className="col-md-6">
           <div className="rating d-flex justify-content-md-end align-content-center gap-2">
-            <img src="assets/star.png" className="mt-2" id="star" alt="" />
+          {props.isEdited && (
+            <p className="mt-2" style={{ marginTop: "10px", color: "darkgrey", marginRight: "15px" }}>
+              Edited
+            </p>
+          )}
+
+          
             <p className="mt-2">  {props.userRating} </p>
+            <span className="fas fa-star checked mx-1" style={{marginTop:"12px"}}></span>
           </div>
         </div>
+        
         <div className="col-md-12 my-3" id="text-content">
-             <p className="text-content mb-1">
-             {isExpanded ? props.revContent : `${props.revContent.substring(0, 100)}...`}
-              {isExpanded && <span className="hidden-content hide">{props.revContent}</span>}
-      </p>
-    </div>
+        <p className="text-content mb-1" style={{fontSize:"25px"}}>
+    <strong> {props.revTitle}</strong>
+  </p>
+  <p className="text-content mb-1">
+    {isExpanded || props.revContent.length <= 100 ? props.revContent : `${props.revContent.substring(0, 100)}...`}
+    {isExpanded && <span className="hidden-content hide">{props.revContent}</span>}
+  </p>
+</div>
     {props.revContent.length > 100 && (
             <button style={{marginLeft:'10px', width:'10%', fontSize:'12px'}} onClick={handleExpand} className="expand-link">
               {isExpanded ? 'Read Less' : 'Read More'}
@@ -273,19 +286,31 @@ const ReviewCard = (props) => {
                     width: '5%',
                   }}
                 ></div>
+                
+                
+                    
+
                 <div className="container-fluid review-content p-3 bg-light mb-2">
+                {!props.isResponseEdited && (
+                  <div className="d-flex justify-content-end"> 
+                          <p className="mt-2" style={{  color: "darkgrey", marginLeft: "20px" }}>
+                            Edited
+                          </p>
+                          </div>
+                        )}
                   <div className="col-md-12">
+                  
 
                   {props.userType===4 && (
                         <div className="d-flex justify-content-end ">
-                        <EditResponseModal restoID={props.restoID} reviewID={props.reviewID}/>
+                        <EditResponseModal restoID={props.restoID} reviewID={props.reviewID} responseContent={props.responseContent}/>
                   
                         <button type="button" className="btn btn-outline-danger btn-sm" onClick={deleteResponse}>
                         Delete
                         </button>
                     </div>
                 )}
-
+                
                     
 
 
@@ -295,7 +320,7 @@ const ReviewCard = (props) => {
                   <div className="user-details row">
                     <div className="col-md-6">
                       <div className="d-flex">
-                        <a href="OwnerProfile.html">
+                        
                         <div className="user-pfp me-2">
                             <img
                                 src={props.ownerProfilePic}
@@ -303,13 +328,17 @@ const ReviewCard = (props) => {
                                 style={{ borderRadius: '50%', width: '70px', height: '70px' }}
                             />
                             </div>
-                        </a>
+                    
                         <div className="user-content flex-column align-content-center mt-1">
                           <p style={{ marginBottom: '3px', fontSize:'20px' }}>Owner's Response</p>
                           <p>{responseDatePosted}</p>
+                          
                         </div>
+                        
                       </div>
+                      
                     </div>
+                    
                     <div className="col-md-12 my-3" id="text-content">
                       <p className="text-content mb-1">
                         {props.responseContent}
@@ -318,6 +347,9 @@ const ReviewCard = (props) => {
 
                     </div>
                   </div>
+
+
+                  
                 </div>
               </div>
 

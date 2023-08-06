@@ -21,7 +21,7 @@ var restoID = id
 
 if(Cookies.get('_id') !== '64bdf3eea4354c42f888ec3c'){
   var userID = Cookies.get('_id').slice(3,27)
-  console.log("GUDS")
+  //console.log("GUDS")
 }
 else {
   var userID = Cookies.get('_id')
@@ -40,6 +40,7 @@ useEffect(() => {
       });
 
 }, []);
+
 
 
 
@@ -68,23 +69,36 @@ useEffect(() => {
   const [currContactNum, setCurrContactNum] = useState('');
   const [filteredReviews, setFilteredReviews] = useState([]);
   const [allReviews, setAllReviews] = useState([]); // State variable to store all reviews
-
+ 
 
   const [userType, setUserType] = useState(0);
+
   
+
   useEffect(() => {
     // Fetch restaurant data
     axios.get(`http://localhost:4000/api/resto/${restoID}`)
       .then(restoResponse => {
         // Handle the successful response and update state variables
         setCurrRestoName(restoResponse.data.restoName);
-        setCurrAvgRating(restoResponse.data.avgRating);
+        //setCurrAvgRating(restoResponse.data.avgRating);
         setCurrAssets(restoResponse.data.assets);
         setCurrDescription(restoResponse.data.description);
         setCurrMenuImgs(restoResponse.data.menuImgs);
         setCurrRestoURL(restoResponse.data.restoUrl);
         setCurrOperatingHours(restoResponse.data.operatingHours);
         setCurrContactNum(restoResponse.data.contactNum);
+        var ownerPic
+        axios.get(`http://localhost:4000/api/profile/${restoResponse.data.owner}`).then(ownerResponse =>{
+          ownerPic = ownerResponse.data.icon
+          console.log(ownerPic)
+        }).catch(error => {
+          // Handle any errors that occurred during fetching user type
+          console.error('Error fetching owner data:', error);
+        });
+        
+        
+        updateAverage();
         setLoading(false);
         
   
@@ -94,7 +108,7 @@ useEffect(() => {
             const userTypeFromServer = userResponse.data.userType;
             setUserType(userTypeFromServer)
            
-            console.log('llll  ' + userTypeFromServer)
+            //console.log('llll  ' + userTypeFromServer)
   
             // Fetch user information for each review and update filteredReviews
             Promise.all(
@@ -103,6 +117,7 @@ useEffect(() => {
               .then(userResponses => {
                 const updatedReviews = restoResponse.data.reviews.map((review, index) => {
                   const userData = userResponses[index].data;
+                  
   
                   // Check if the review user matches the logged-in user (userID)
                   let reviewUserType = 1;
@@ -119,16 +134,13 @@ useEffect(() => {
                     reviewUserType = 4;
                   }
 
-                  console.log('userID:     ' + userData._id)
-                  console.log('revUserType ' + reviewUserType)
+            
   
                   // Update the review object with the correct reviewID
                   const updatedReview = {
                     ...review,
                     reviewID: review._id // Add the reviewID to the review object
                   };
-
-                 
                   
                   // Return the ReviewCard component with updated properties
                   return (
@@ -142,11 +154,12 @@ useEffect(() => {
                       datePosted={review.datePosted}
                       userRating={review.userRating}
                       revContent={review.revContent}
+                      revTitle={review.revTitle}
                       filename={review.filename}
                       likes={review.likes}
                       dislikes={review.dislikes}
                       hasOwnerResponse={review.hasOwnerResponse}
-                      ownerProfilePic={userData.profilePic || pfp}
+                      ownerProfilePic={ownerPic || pfp}
                       responseDatePosted={review.responseDatePosted}
                       responseContent={review.responseContent}
                       userType={reviewUserType} // Use the updated userType for the review
@@ -155,6 +168,8 @@ useEffect(() => {
                       key={review._id}
                       dislikedUsers={review.dislikedUsers}
                       likedUsers={review.likedUsers}
+                      isEdited={review.isEdited}
+                      isResponseEdited={review.isResponseEdited}
 
                       
                       // ...
@@ -163,6 +178,7 @@ useEffect(() => {
                 });
                 setAllReviews(updatedReviews);
                 setFilteredReviews(updatedReviews);
+                //calculateAverage();
               })
               .catch(error => {
                 // Handle any errors that occurred during fetching user information
@@ -207,10 +223,15 @@ useEffect(() => {
     if (searchTerm) {
       filtered = filtered.filter(
         (review) =>
-          review.props.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          review.props.revContent.toLowerCase().includes(searchTerm.toLowerCase())
+          (review.props.username &&
+            review.props.username.toLowerCase().includes(searchTerm.toLowerCase())) ||
+          (review.props.revContent &&
+            review.props.revContent.toLowerCase().includes(searchTerm.toLowerCase())) ||
+          (review.props.revTitle &&
+            review.props.revTitle.toLowerCase().includes(searchTerm.toLowerCase()))
       );
     }
+    
   
     if (filterOption === 'helpfulness') {
       filtered.sort((a, b) => b.props.likes - a.props.likes);
@@ -225,6 +246,7 @@ useEffect(() => {
 
   const [userRating, setUserRating] = useState('');
   const [revContent, setRevContent] = useState('');
+  const [revTitle, setRevTitle] = useState('');
   const [filename, setFilename] = useState('');
   
   const handleUserRatingChange = (e) => {
@@ -235,6 +257,47 @@ useEffect(() => {
     setRevContent(e.target.value);
   };
 
+  const handleRevTitleChange = (e) => {
+    setRevTitle(e.target.value);
+  };
+  
+  const updateAverage = async () => {
+    try {
+      const restoResponse = await axios.get(`http://localhost:4000/api/resto/${restoID}`);
+      const reviewPromises = restoResponse.data.reviews.map(review => axios.get(`http://localhost:4000/api/profile/${review.user}`));
+      
+      
+      const userResponses = await Promise.all(reviewPromises);
+      var totalRating = 0;
+      var numReviews = 0;
+      
+  
+      for (const review of restoResponse.data.reviews) {
+        console.log('Review User Rating:', review.userRating);
+        totalRating += review.userRating;
+        numReviews += 1;
+        //console.log("total" + totalRating)
+      //console.log("numRev" + numReviews)
+      }
+  
+      const averageRating = (totalRating / numReviews).toFixed(1);
+      //console.log("AVERAGE" + averageRating)
+      setCurrAvgRating(averageRating)
+      // Update the restaurant's average rating using PATCH request
+      const requestData = {
+        avgRating: parseFloat(averageRating),
+      };
+  
+      try {
+        await axios.patch(`http://localhost:4000/api/resto/${restoID}`, requestData);
+        console.log('Average rating updated');
+      } catch (error) {
+        console.error('Error updating average:', error);
+      }
+    } catch (error) {
+      console.error('Error fetching restaurant data:', error);
+    }
+  };
   
   
 
@@ -243,16 +306,20 @@ useEffect(() => {
     const formData = new FormData();
     formData.append('userRating', userRating);
     formData.append('revContent', revContent);
+    formData.append('revTitle', revTitle)
     formData.append('image', filename);
+    
   
     try {
       const response = await axios.post(`http://localhost:4000/api/reviewnew/${restoID}/${userID}`, formData);
   
       setUserRating('');
       setRevContent('');
+      setRevTitle('');
       setFilename('');
       setSearchTerm('');
       setFilterOption('');
+      
       document.getElementById('review-form').reset();
       window.location.reload()
     } catch (error) {
@@ -289,154 +356,107 @@ useEffect(() => {
                 <div className="row d-flex">
                   {((userType !== 3) && (userType !== 1) ) && (
                     <button
-                      type="submit"
-                      className="btn btn-danger btn-lg btn-block mb-3"
-                      style={{ width: '74%' }}
-                      data-bs-toggle="modal"
-                      data-bs-target="#review"
-                    >
-                      Write a Review
-                    </button>
-                  )}
-
-                  <div className="modal" id="review">
-                    <div className="modal-dialog">
-                      <div className="modal-content">
-                        <div className="review-section">
-                          <div className="container my-5">
-                            <div className="review-section">
-                              <h2>Write a Review</h2>
-                              <form onSubmit={handleSubmit} id="review-form">
-                                <div className="mb-3">
-                                  <label htmlFor="rating" className="form-label">
-                                    Rating:
-                                  </label>
-                                  <select
-                                    id="rating"
-                                    name="rating"
-                                    required
-                                    className="form-select"
-                                    value={userRating}
-                                    onChange={handleUserRatingChange}
-                                  >
-                                    <option value="">Select a rating</option>
-                                    <option value="5">&#9733;&#9733;&#9733;&#9733;&#9733;</option>
-                                    <option value="4">&#9733;&#9733;&#9733;&#9733;</option>
-                                    <option value="3">&#9733;&#9733;&#9733;</option>
-                                    <option value="2">&#9733;&#9733;</option>
-                                    <option value="1">&#9733;</option>
-                                  </select>
-                                </div>
-                                <div className="mb-3">
-                                  <label htmlFor="review" className="form-label">
-                                    Review:
-                                  </label>
-                                  <textarea
-                                    id="review"
-                                    name="review"
-                                    required
-                                    className="form-control"
-                                    value={revContent}
-                                    onChange={handleRevContentChange}
-                                  ></textarea>
-                                </div>
-                                <div className="mb-3">
-                                  <label htmlFor="media" className="form-label">
-                                    Upload Media:
-                                  </label>
-                                  <input
-                                    type="file"
-                                    id="media"
-                                    name="media"
-                                    accept="image/*, video/*"
-                                    onChange={(e) => setFilename(e.target.files[0])}
-                                  />
-                                </div>
-                                <div>
-                                  <button type="submit" data-bs-dismiss="modal" className="btn btn-danger">
-                                    Submit
-                                  </button>
-                                </div>
-                              </form>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <button
                     type="submit"
                     className="btn btn-danger btn-lg btn-block mb-3"
-                    style={{ marginLeft: '5px', width: '12%' }}
+                    style={{
+                      width: '18%',
+                      height: '40px',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
                     data-bs-toggle="modal"
-                    data-bs-target="#search"
+                    data-bs-target="#review"
                   >
-                    <img src={search} alt="Search" />
+                    Write
                   </button>
+                  
+                  )}
 
-                  <div className="dropdown" style={{ width: '12%' }}>
-                    <button
-                      className="btn btn-danger btn-lg btn-block mb-3"
-                      data-bs-toggle="dropdown"
-                      aria-expanded="false"
-                    >
-                      <img
-                        className="img-fluid"
-                        src={filter}
-                        alt="Filter"
-                        style={{ height: '25px' }}
-                      />
-                    </button>
-                    <ul className="dropdown-menu">
-                      <li>
-                        <a
-                          className="dropdown-item"
-                          href="#"
-                          onClick={() => setFilterOption('helpfulness')}
-                        >
-                          Filter by Helpfulness
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          className="dropdown-item"
-                          href="#"
-                          onClick={() => setFilterOption('rating')}
-                        >
-                          Filter by Rating
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          className="dropdown-item"
-                          href="#"
-                          onClick={() => setFilterOption('recent')}
-                        >
-                          Filter by Most Recent
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
+<div className="modal" id="review">
+  <div className="modal-dialog">
+    <div className="modal-content">
+      <div className="review-section">
+        <div className="container my-5">
+          <div className="review-section">
+            <h2>Write a Review</h2>
+            <form onSubmit={handleSubmit} id="review-form">
+              <div className="mb-3">
+                <label htmlFor="rating" className="form-label">
+                  Rating:
+                </label>
+                <select
+                  id="rating"
+                  name="rating"
+                  required
+                  className="form-select"
+                  value={userRating}
+                  onChange={handleUserRatingChange}
+                >
+                  <option value="">Select a rating</option>
+                  <option value="5">&#9733;&#9733;&#9733;&#9733;&#9733;</option>
+                  <option value="4">&#9733;&#9733;&#9733;&#9733;</option>
+                  <option value="3">&#9733;&#9733;&#9733;</option>
+                  <option value="2">&#9733;&#9733;</option>
+                  <option value="1">&#9733;</option>
+                </select>
+              </div>
+              <div className="mb-3">
+                <label htmlFor="reviewtitle" className="form-label">
+                  Title:
+                </label>
+                <textarea
+                  id="reviewtitle"
+                  name="reviewtitle"
+                  required
+                  className="form-control"
+                  value={revTitle}
+                  onChange={handleRevTitleChange}
+                ></textarea>
+                <label htmlFor="review" className="form-label">
+                  Review:
+                </label>
+                <textarea
+                  id="review"
+                  name="review"
+                  required
+                  className="form-control"
+                  value={revContent}
+                  onChange={handleRevContentChange}
+                ></textarea>
+              </div>
+              <div className="mb-3">
+                <label htmlFor="media" className="form-label">
+                  Upload Media:
+                </label>
+                <input
+                  type="file"
+                  id="media"
+                  name="media"
+                  accept="image/*, video/*"
+                  onChange={(e) => setFilename(e.target.files[0])}
+                />
+              </div>
+              <div>
+                <button
+                  type="submit"
+                  data-bs-dismiss="modal"
+                  className="btn btn-danger"
+                  disabled={!userRating || !revTitle || !revContent}
+                >
+                  Submit
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
-                                <div
-                        className="modal"
-                        id="search"
-                        tabIndex="-1"
-                        aria-labelledby="searchModalLabel"
-                        aria-hidden="true"
-                      >
-                        <div className="modal-dialog">
-                          <div className="modal-content">
-                            <div className="modal-header">
-                              <h5 className="modal-title" id="searchModalLabel">
-                                Search for a Review
-                              </h5>
-                             
-                            </div>
-                            <div className="modal-body">
-                              <form>
-                                <div className="mb-3">
+                
+                  <div className="mb-3" style={{ width: '60%' }}>
                                   <input
                                     type="search"
                                     className="form-control"
@@ -446,16 +466,53 @@ useEffect(() => {
                                     onChange={(e) => setSearchTerm(e.target.value)}
                                   />
                                 </div>
-                                <div className="text-center">
+                  
+                  
+                  <div className="dropdown" style={{ width: '12%', height:'36px'}}> 
+                    <button
+                      className="btn btn-danger btn-lg btn-block mb-3 d-flex align-items-center justify-content-center"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                      style={{ width: '100%', height:'40px'}}
+                    >
+                      <img
+                        className="img-fluid"
+                        src={filter}
+                        alt="Filter"
+                        style={{ height: '30px', width: '20px' }}
+                      />
+                    </button>
+                    <ul className="dropdown-menu">
+                      <li>
+                        <a
+                          className="dropdown-item"
+                          href="#"
+                          onClick={() => setFilterOption('helpfulness')}
+                        >
+                          Sort by Helpfulness
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          className="dropdown-item"
+                          href="#"
+                          onClick={() => setFilterOption('rating')}
+                        >
+                          Sort by Rating
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          className="dropdown-item"
+                          href="#"
+                          onClick={() => setFilterOption('recent')}
+                        >
+                          Sort by Most Recent
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
 
-
-                          
-                                </div>
-                              </form>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
 
                 </div>
 

@@ -5,7 +5,7 @@ import axios from 'axios';
 
 
 function EditResponseModal(props) {
-    const [responseContent, setResponseContent] = useState('');
+    const [responseContent, setResponseContent] = useState(props.responseContent);
     const [hasOwnerResponse, setOwnerResponse] = useState(true);
     
 
@@ -18,6 +18,7 @@ function EditResponseModal(props) {
         const formData = new FormData();
         formData.append('responseContent', responseContent);
         formData.append('hasOwnerResponse', hasOwnerResponse);
+        formData.append('isResponseEdited', true)
       
     
         
@@ -62,7 +63,7 @@ function EditResponseModal(props) {
                   </form>
                             </Modal.Body>
         <Modal.Footer>
-            <button type="submit" onClick={handleEdit} className="btn btn-danger"> Submit </button>
+            <button type="submit" disabled={!responseContent} onClick={handleEdit} className="btn btn-danger"> Submit </button>
             <button type="submit" onClick={handleClose} className="btn btn-secondary"> Close </button>
         </Modal.Footer>
         </Modal>

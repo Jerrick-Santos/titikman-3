@@ -199,6 +199,7 @@ const createReview = async (req, res) => {
     let { 
             userRating, 
             revContent,
+            revTitle
         } = req.body
 
     //get user id via session - insert code here 
@@ -225,7 +226,8 @@ const createReview = async (req, res) => {
             filename,
             likes, 
             dislikes,
-            hasOwnerResponse
+            hasOwnerResponse,
+            revTitle
             // likedUsers,
             // dislikedUsers
         })
@@ -292,7 +294,7 @@ const deleteReview = async (req, res) => {
 
 const updateReview = async (req, res) => {
     const { resto, id } = req.params 
-    const { userRating, revContent, likes, dislikes, hasOwnerResponse, responseContent, likedUsers, dislikedUsers} = req.body;
+    const { userRating, revContent, revTitle, likes, dislikes, hasOwnerResponse, responseContent, likedUsers, dislikedUsers, isEdited, isResponseEdited} = req.body;
 
     const date = new Date();
     const year = date.getFullYear();
@@ -361,6 +363,7 @@ const updateReview = async (req, res) => {
                 $set: {
                   'reviews.$.userRating': userRating,
                   'reviews.$.revContent': revContent,
+                  'reviews.$.revTitle': revTitle,
                   'reviews.$.likes': likes,
                   'reviews.$.dislikes': dislikes,
                   'reviews.$.filename': filename,
@@ -368,7 +371,9 @@ const updateReview = async (req, res) => {
                   'reviews.$.responseDatePosted': Date.now(),
                   'reviews.$.responseContent': responseContent,
                   'reviews.$.likedUsers': likedUsers,
-                  'reviews.$.dislikedUsers': dislikedUsers
+                  'reviews.$.dislikedUsers': dislikedUsers,
+                  'reviews.$.isEdited': isEdited,
+                  'reviews.$.isResponseEdited': isResponseEdited
 
                 }
               }
@@ -514,6 +519,42 @@ const createResto = async (req, res) => {
 
 }
 
+const updateResto = async (req,res) => {
+    const { id } = req.params
+    const { avgRating } = req.body;
+
+    //const resto = await Resto.findById(id)
+
+
+    try {
+
+        //delete from resto schema
+
+        const resto = await Resto.findOneAndUpdate({_id: id}, {
+            ...req.body
+        })
+
+        if(!resto){
+            return res.status(404).json({error: 'Resto Not Found'})
+        }
+
+        //delete from resto schema
+
+        const updatedRes = await Resto.updateOne(
+            { _id: id},
+            {
+                $set: {
+                  'resto.$.avgRating': avgRating
+                }
+              }
+            );
+      
+        res.status(200).json(updatedRes)
+        
+    } catch (error) {
+        res.status(400).json({error: error.message})
+    }    
+}
 
 //IMAGE REQUESTS
 
@@ -538,6 +579,8 @@ module.exports = {
     createReview,
     deleteReview,
     updateReview,
+    //newly added
+    updateResto,
     createUser,
     getUser,
     editUser,

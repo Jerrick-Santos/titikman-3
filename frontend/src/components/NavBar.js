@@ -6,13 +6,17 @@ import React, { useState, useEffect } from 'react';
 
   const NavBar = (props) => {
     const GUEST_USERID = "64bdf3eea4354c42f888ec3c";
+
     const [userID, setUserID] = useState(props.userIDcookies);
     const navigate = useNavigate();
-    console.log("new user id:" + userID)
-    console.log(GUEST_USERID)
   
     useEffect(() => {
-      setUserID(Cookies.get('_id'));
+      if(Cookies.get('_id') == null || Cookies.get('_id') === undefined){
+        setUserID(GUEST_USERID)
+      }
+      else{
+        setUserID(Cookies.get('_id'))
+      }
     }, [userID]);
 
   const handleLogout = () => {

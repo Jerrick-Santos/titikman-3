@@ -10,7 +10,10 @@ const RestaurantProfile= (props) => {
                   <div className="image-container">
                      <img src="assets/star.png" className="img-fluid mt-1" id="star-ave" alt=""/>
                   </div>
-                  <p cclassName="display-6">{props.avgRating}</p>
+                  <div className='d-flex align-items-center rating'>
+                            <span className="fas fa-star checked mx-1"></span>
+                            <span className="rating-number">{props.avgRating}</span>
+                        </div>
                </div>
             </div>
             <div id="resto-indicators" className="carousel slide mb-4">

@@ -6,6 +6,7 @@ import axios from 'axios';
 function EditUser(props) {
   const [show, setShow] = useState(false);
   const [bio, setBio] = useState(props.bio);
+  //console.log("BIO" + props.bio)
   const [image, setImage] = useState(null);
 
   const userId = props.userId
@@ -60,11 +61,15 @@ function EditUser(props) {
                 Bio
               </label>
               <textarea
-                type="textarea"
+                 id="bio"
+                 name="bio"
+                 required
                 value={bio}
                 onChange={(e) => setBio(e.target.value)}
                 className="form-control"
-              />
+              >
+              
+              </textarea>
               <label htmlFor="media" className="form-label">
                 Upload Media:
               </label>
