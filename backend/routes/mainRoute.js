@@ -56,6 +56,10 @@ router.get('/resto/:id', getResto) //OK
 
 router.post('/restonew', createResto) //OK
 
+//COOKIES 
+
+router.get('/userid',)
+
 
 // TEST ROUTES 
 
