@@ -40,7 +40,7 @@ const SignUpForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const signup = {firstName, lastName, userName, plainpassword, userType}
-    const response = await fetch('/api/signup', {
+    const response = await fetch('https://titikman.onrender.com/api/signup', {
       method: "POST",
       body: JSON.stringify(signup),
       headers: {

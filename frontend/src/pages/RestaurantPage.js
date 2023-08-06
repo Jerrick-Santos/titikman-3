@@ -30,8 +30,8 @@ const [firstName, setFirstName] = useState('');
 
 useEffect(() => {
 
-    console.log('http://localhost:4000/api/profile/' + userID)
-    axios.get(`http://localhost:4000/api/profile/${userID}`)
+    console.log('https://titikman.onrender.com/api/profile/' + userID)
+    axios.get(`https://titikman.onrender.com/api/profile/${userID}`)
       .then((response) => {
         setFirstName(response.data.firstName)
       })
@@ -78,8 +78,8 @@ useEffect(() => {
 
   useEffect(() => {
     // Fetch restaurant data
-    console.log('http://localhost:4000/api/resto/' + userID)
-    axios.get(`http://localhost:4000/api/resto/${restoID}`)
+    console.log('https://titikman.onrender.com/api/resto/' + userID)
+    axios.get(`https://titikman.onrender.com/api/resto/${restoID}`)
       .then(restoResponse => {
         // Handle the successful response and update state variables
         setCurrRestoName(restoResponse.data.restoName);
@@ -91,7 +91,7 @@ useEffect(() => {
         setCurrOperatingHours(restoResponse.data.operatingHours);
         setCurrContactNum(restoResponse.data.contactNum);
         var ownerPic
-        axios.get(`http://localhost:4000/api/profile/${restoResponse.data.owner}`).then(ownerResponse =>{
+        axios.get(`https://titikman.onrender.com/api/profile/${restoResponse.data.owner}`).then(ownerResponse =>{
           ownerPic = ownerResponse.data.icon
           console.log(ownerPic)
         }).catch(error => {
@@ -105,7 +105,7 @@ useEffect(() => {
         
   
         // Fetch user type for the logged-in user
-        axios.get(`http://localhost:4000/api/profile/${userID}`)
+        axios.get(`https://titikman.onrender.com/api/profile/${userID}`)
           .then(userResponse => {
             const userTypeFromServer = userResponse.data.userType;
             setUserType(userTypeFromServer)
@@ -114,7 +114,7 @@ useEffect(() => {
   
             // Fetch user information for each review and update filteredReviews
             Promise.all(
-              restoResponse.data.reviews.map(review => axios.get(`http://localhost:4000/api/profile/${review.user}`))
+              restoResponse.data.reviews.map(review => axios.get(`https://titikman.onrender.com/api/profile/${review.user}`))
             )
               .then(userResponses => {
                 const updatedReviews = restoResponse.data.reviews.map((review, index) => {
@@ -265,8 +265,8 @@ useEffect(() => {
   
   const updateAverage = async () => {
     try {
-      const restoResponse = await axios.get(`http://localhost:4000/api/resto/${restoID}`);
-      const reviewPromises = restoResponse.data.reviews.map(review => axios.get(`http://localhost:4000/api/profile/${review.user}`));
+      const restoResponse = await axios.get(`https://titikman.onrender.com/api/resto/${restoID}`);
+      const reviewPromises = restoResponse.data.reviews.map(review => axios.get(`https://titikman.onrender.com/api/profile/${review.user}`));
       
       
       const userResponses = await Promise.all(reviewPromises);
@@ -291,7 +291,7 @@ useEffect(() => {
       };
   
       try {
-        await axios.patch(`http://localhost:4000/api/resto/${restoID}`, requestData);
+        await axios.patch(`https://titikman.onrender.com/api/resto/${restoID}`, requestData);
         console.log('Average rating updated');
       } catch (error) {
         console.error('Error updating average:', error);
@@ -313,7 +313,7 @@ useEffect(() => {
     
   
     try {
-      const response = await axios.post(`http://localhost:4000/api/reviewnew/${restoID}/${userID}`, formData);
+      const response = await axios.post(`https://titikman.onrender.com/api/reviewnew/${restoID}/${userID}`, formData);
   
       setUserRating('');
       setRevContent('');

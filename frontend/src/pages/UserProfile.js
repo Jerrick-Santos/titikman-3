@@ -18,7 +18,7 @@ const UserProfile = () => {
 
   useEffect(() => {
     
-    axios.get(`http://localhost:4000/api/profile/${userID}`)
+    axios.get(`https://titikman.onrender.com/api/profile/${userID}`)
       .then((response) => {
         setNavFirstName(response.data.firstName)
       })
@@ -44,7 +44,7 @@ const UserProfile = () => {
 
   useEffect(() => {
     // Fetch restaurant data
-    axios.get(`http://localhost:4000/api/profile/${id}`)
+    axios.get(`https://titikman.onrender.com/api/profile/${id}`)
       .then(response => {
         // Handle the successful response and update state variables
         setFirstName(response.data.firstName);
@@ -62,7 +62,7 @@ const UserProfile = () => {
 
     const getUserReviews = async () => {
         try {
-            const response = await axios.get(`http://localhost:4000/api/reviewsbyuser/${id}`);
+            const response = await axios.get(`https://titikman.onrender.com/api/reviewsbyuser/${id}`);
             const jsonData = response.data; // Access the data property of the response
         
             if (jsonData) {
@@ -82,7 +82,7 @@ const UserProfile = () => {
   useEffect(() => {
     if (updateProfile) {
       axios
-        .get(`http://localhost:4000/api/profile/${id}`)
+        .get(`https://titikman.onrender.com/api/profile/${id}`)
         .then((response) => {
           // Handle the successful response and update state variables
           setFirstName(response.data.firstName);
@@ -123,7 +123,7 @@ const UserProfile = () => {
   // Handle edit profile submission
   const handleEditProfile = async (formData) => {
     try {
-      const response = await fetch(`/api/profile/${profileData._id}`, {
+      const response = await fetch(`https://titikman.onrender.com/api/profile/${profileData._id}`, {
         method: 'PATCH',
         body: formData,
       });
@@ -141,7 +141,7 @@ const UserProfile = () => {
   // Handle review submission
   const handleCreateReview = async (formData) => {
     try {
-      const response = await fetch(`/api/reviewnew/${profileData._id}`, {
+      const response = await fetch(`https://titikman.onrender.com/api/reviewnew/${profileData._id}`, {
         method: 'POST',
         body: formData,
       });

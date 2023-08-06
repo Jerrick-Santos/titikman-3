@@ -20,7 +20,7 @@ const Home = () => {
             
 
         const fecthRestos = async () => {
-            const response = await fetch('/api/restos')
+            const response = await fetch('https://titikman.onrender.com/api/restos')
             
             const json = await response.json()
 
@@ -52,7 +52,7 @@ const Home = () => {
             console.log(userID)
         }
             
-        axios.get(`http://localhost:4000/api/profile/${userID}`)
+        axios.get(`https://titikman.onrender.com/api/profile/${userID}`)
             .then((response) => {
             setFirstName(response.data.firstName)
             })

@@ -23,7 +23,7 @@ function ResponseModal(props) {
         try {
       
           const response = await axios.patch(
-            `http://localhost:4000/api/review/${props.restoID}/${props.reviewID}`, formData );
+            `https://titikman.onrender.com/api/review/${props.restoID}/${props.reviewID}`, formData );
       
           setResponseContent('');
           window.location.reload();

@@ -18,7 +18,7 @@ const SearchResto = () => {
     useEffect(() => {
             
         console.log(searchQuery)
-        axios.get(`http://localhost:4000/api/resto/search?name=${searchQuery}`)
+        axios.get(`https://titikman.onrender.com/api/resto/search?name=${searchQuery}`)
         .then((response) => {
         setRestos(response.data)
         })
@@ -45,7 +45,7 @@ const SearchResto = () => {
             console.log(userID)
         }
             
-        axios.get(`http://localhost:4000/api/profile/${userID}`)
+        axios.get(`https://titikman.onrender.com/api/profile/${userID}`)
             .then((response) => {
             setFirstName(response.data.firstName)
             })
