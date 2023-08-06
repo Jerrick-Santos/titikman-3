@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 const { MongoClient, ObjectId } = require('mongodb');
 const e = require('express');
 const { uploadFile } = require('../s3')
-
+const bcrypt = require('bcrypt')
 
 //COOKIES REQUEST
 const getCookies = (req, res) => {
@@ -14,12 +14,14 @@ const getCookies = (req, res) => {
 //USER REQUESTS
 
 const createUser = async (req, res) => {
-    const {firstName, lastName, userName, password, bio, userType} = req.body
+    const {firstName, lastName, userName, plainpassword, bio, userType} = req.body
 
     let icon = "https://titikman.s3.amazonaws.com/user1.png"
 
     try {
 
+        const password = await bcrypt.hash(plainpassword, 10)
+        console.log(password)
         newUser = new User({firstName, lastName, userName, password, bio, icon, userType})
         const savedUser = await newUser.save();
 
@@ -71,13 +73,12 @@ const createUser = async (req, res) => {
 
 const login = async (req, res) => {
     const { userName, password, rememberMe } = req.body;
-    console.log("hello");
-    console.log(rememberMe);
-    console.log(userName, password);
     
-    User.findOne({ userName: userName }).then((user) => {
+    User.findOne({ userName: userName }).then(async (user) => {
         if (user) {
-            if (user.password === password) {
+            const check = await bcrypt.compare(password, user.password)
+            console.log(check)
+            if (await bcrypt.compare(password, user.password)) {
                 let expiryDate;
                 if (rememberMe) {
                     expiryDate = new Date(Date.now() + 3 * 7 * 24 * 60 * 60 * 1000);  // 3 weeks expiration
