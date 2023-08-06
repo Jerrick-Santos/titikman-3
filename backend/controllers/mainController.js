@@ -412,6 +412,7 @@ const getRestos = async (req, res) => {
         if(req.cookies._id == process.env.GUEST_USERID && req.cookies.userType == 1){
             res.cookie('userType', 1);
             res.cookie('_id', process.env.GUEST_USERID);
+            Cookies.set()
             console.log("Anon User Match")
         }
         else{

@@ -25,6 +25,12 @@ app.use((req, res, next) => {
     next()
 })
 
+const cors = require('cors');
+
+app.use(cors({
+    origin: 'https://titikman.vercel.app', // Allow requests from your frontend domain
+    credentials: true, // Enable sending cookies in cross-origin requests
+}));
 
 
 // app.get('/getcookie', (req, res) => {
