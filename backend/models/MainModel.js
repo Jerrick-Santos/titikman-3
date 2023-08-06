@@ -26,6 +26,14 @@ const reviewSchema = new Schema({
         type: Number,
         required: true
     },
+    restaurant:{
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'Restaurant'
+    },
+    restaurantName:{
+        type: String,
+        required: false
+    },
     revTitle:{
         type: String,
     }, 

@@ -130,8 +130,12 @@ const getReviewsByUser = async (req, res) => {
 
     try {
 
-        const restos = await Review.find({user: id}).sort({createdAt: -1})
-
+        const restos = await Review.find({user: id})
+        .sort({createdAt: -1})
+        .populate({
+            path: 'restaurant',
+            select: 'restoName',
+        });
 
         res.status(200).json(restos)
         
@@ -218,10 +222,14 @@ const createReview = async (req, res) => {
             return res.status(404).json({error: 'No Resto Found'})
         }
 
+        const restaurantName = resto.restoName;
+
         const newReview = new Review({            
             user, 
             datePosted, 
             userRating, 
+            restaurant: restoid,
+            restaurantName,
             revContent,
             filename,
             likes, 
