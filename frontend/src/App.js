@@ -5,6 +5,10 @@ import SignUpForm from './pages/SignUp'
 import LoginForm from './pages/LogIn';
 import UserProfile from './pages/UserProfile';
 import RestaurantPage from './pages/RestaurantPage';
+
+import React, { useState, useEffect } from 'react';
+import Cookies from 'js-cookie';
+
 function App(){
     return(
         <>

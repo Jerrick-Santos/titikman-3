@@ -23,8 +23,9 @@ const createUser = async (req, res) => {
         newUser = new User({firstName, lastName, userName, password, bio, icon, userType})
         const savedUser = await newUser.save();
 
-        res.cookie('userType', savedUser.userType);
-        res.cookie('_id', savedUser._id);
+        res.cookie('userType', savedUser.userType, { expires: undefined });
+        res.cookie('_id', savedUser._id, { expires: undefined });
+        res.cookie('rememberMe', false)
 
         console.log('New user saved to MongoDB:', savedUser);
         res.status(200).json({newUser})
@@ -35,14 +36,59 @@ const createUser = async (req, res) => {
     }
 }
 
+// const login = async (req, res) => {
+//     const { userName, password, rememberMe } = req.body
+//     console.log("hello")
+//     console.log(rememberMe)
+//     console.log(userName, password)
+//     User.findOne({userName: userName}).then((user) => {
+//         if(user){
+//             if(user.password === password){
+
+//                 if(rememberMe){
+//                     const expiryDate = new Date(Date.now() + 3 * 24 * 60 * 60 * 1000);
+//                     res.cookie('userType', user.userType, { expires: expiryDate });
+//                     res.cookie('_id', user._id, { expires: expiryDate });
+//                     res.cookie('rememberMe', true)
+//                     res.json("Success" + rememberMe);
+//                 }
+//                 else{
+//                     res.cookie('userType', user.userType, { expires: 0 });
+//                     res.cookie('_id', user._id, { expires: 0 });
+//                     res.cookie('rememberMe', false)
+//                     res.json("Success");
+//                     res.json("Success" + rememberMe);
+//                 }
+
+//             } else {
+//                 res.status(401).json("Password Incorrect");
+//             }
+//         } else {
+//             res.status(401).json("No Record Exists");
+//         }
+//     })
+// }
+
 const login = async (req, res) => {
-    const { userName, password } = req.body
-    console.log(userName, password)
-    User.findOne({userName: userName}).then((user) => {
-        if(user){
-            if(user.password === password){
-                res.cookie('userType', user.userType);
-                res.cookie('_id', user._id);
+    const { userName, password, rememberMe } = req.body;
+    console.log("hello");
+    console.log(rememberMe);
+    console.log(userName, password);
+    
+    User.findOne({ userName: userName }).then((user) => {
+        if (user) {
+            if (user.password === password) {
+                let expiryDate;
+                if (rememberMe) {
+                    expiryDate = new Date(Date.now() + 3 * 7 * 24 * 60 * 60 * 1000);  // 3 weeks expiration
+                } else {
+                    expiryDate = undefined;  // Expire when the browser is closed
+                }
+
+                res.cookie('userType', user.userType, { expires: expiryDate });
+                res.cookie('_id', user._id, { expires: expiryDate });
+                res.cookie('rememberMe', rememberMe);
+
                 res.json("Success");
             } else {
                 res.status(401).json("Password Incorrect");
@@ -50,8 +96,9 @@ const login = async (req, res) => {
         } else {
             res.status(401).json("No Record Exists");
         }
-    })
-}
+    });
+};
+
 
 const getUser = async (req, res) => {
     const { id } = req.params
@@ -169,6 +216,7 @@ const createReview = async (req, res) => {
     console.log("is it running")
     console.log(restoid)
     console.log(id)
+    console.log("is it true")
 
     let filename;
     if (req.file) {
@@ -217,6 +265,11 @@ const createReview = async (req, res) => {
         if (!resto){
             return res.status(404).json({error: 'No Resto Found'})
         }
+
+        console.log("USER: " + id)
+        console.log("USER RATING" + userRating)
+        console.log("REV CONTENT" + revContent)
+        console.log("REV TITLE" + revTitle)
 
         const newReview = new Review({            
             user, 

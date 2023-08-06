@@ -29,7 +29,8 @@ else {
 const [firstName, setFirstName] = useState('');
 
 useEffect(() => {
-  
+
+    console.log('http://localhost:4000/api/profile/' + userID)
     axios.get(`http://localhost:4000/api/profile/${userID}`)
       .then((response) => {
         setFirstName(response.data.firstName)
@@ -77,6 +78,7 @@ useEffect(() => {
 
   useEffect(() => {
     // Fetch restaurant data
+    console.log('http://localhost:4000/api/resto/' + userID)
     axios.get(`http://localhost:4000/api/resto/${restoID}`)
       .then(restoResponse => {
         // Handle the successful response and update state variables
@@ -388,7 +390,6 @@ useEffect(() => {
                 <select
                   id="rating"
                   name="rating"
-                  required
                   className="form-select"
                   value={userRating}
                   onChange={handleUserRatingChange}

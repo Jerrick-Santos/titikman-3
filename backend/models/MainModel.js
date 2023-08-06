@@ -24,7 +24,7 @@ const reviewSchema = new Schema({
     },
     userRating:{
         type: Number,
-        required: true
+        // required: true
     },
     revTitle:{
         type: String,
