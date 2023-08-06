@@ -320,7 +320,7 @@ const ReviewCard = (props) => {
                   <div className="user-details row">
                     <div className="col-md-6">
                       <div className="d-flex">
-                        <a href="OwnerProfile.html">
+                        
                         <div className="user-pfp me-2">
                             <img
                                 src={props.ownerProfilePic}
@@ -328,7 +328,7 @@ const ReviewCard = (props) => {
                                 style={{ borderRadius: '50%', width: '70px', height: '70px' }}
                             />
                             </div>
-                        </a>
+                    
                         <div className="user-content flex-column align-content-center mt-1">
                           <p style={{ marginBottom: '3px', fontSize:'20px' }}>Owner's Response</p>
                           <p>{responseDatePosted}</p>
