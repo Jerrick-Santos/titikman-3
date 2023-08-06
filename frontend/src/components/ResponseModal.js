@@ -63,7 +63,7 @@ function ResponseModal(props) {
                   </form>
                             </Modal.Body>
         <Modal.Footer>
-            <button type="submit" onClick={handleEdit} className="btn btn-danger"> Submit </button>
+            <button type="submit" onClick={handleEdit} disabled={!responseContent} className="btn btn-danger"> Submit </button>
             <button type="submit" onClick={handleClose} className="btn btn-secondary"> Close </button>
         </Modal.Footer>
         </Modal>
