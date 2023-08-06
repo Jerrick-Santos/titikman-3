@@ -99,7 +99,8 @@ const restoSchema = new Schema({
     }, 
     menuImgs:[String], 
     reviews: {type:[Review.schema]}, //[{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }], 
-    owner:  { type: mongoose.Schema.Types.ObjectId, ref: 'User'}
+    owner:  { type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+    keywords: [String]
 })
 
 const Resto = mongoose.model('Restaurant', restoSchema);

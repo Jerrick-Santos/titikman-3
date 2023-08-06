@@ -60,6 +60,10 @@ router.post('/restonew', createResto) //OK
 //test
 router.patch('/resto/:id', updateResto) 
 
+//COOKIES 
+
+router.get('/userid',)
+
 
 // TEST ROUTES 
 
