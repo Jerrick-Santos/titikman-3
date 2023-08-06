@@ -8,8 +8,8 @@ import React, { useState, useEffect } from 'react';
     const GUEST_USERID = "64bdf3eea4354c42f888ec3c";
     const [userID, setUserID] = useState(props.userIDcookies);
     const navigate = useNavigate();
-    console.log("new user id:" + userID)
-    console.log(GUEST_USERID)
+    //console.log("new user id:" + userID)
+    //console.log(GUEST_USERID)
   
     useEffect(() => {
       setUserID(Cookies.get('_id'));

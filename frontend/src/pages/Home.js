@@ -16,12 +16,14 @@ const Home = () => {
     const userType = useState(Cookies.get('userType')) 
 
     
-if(Cookies.get('_id') !== '64bdf3eea4354c42f888ec3c'){
-    var userID = Cookies.get('_id').slice(3,27)
-  }
-  else {
-    var userID = Cookies.get('_id')
-  }
+var userID;
+
+if (Cookies.get('_id') !== undefined && Cookies.get('_id') !== '64bdf3eea4354c42f888ec3c') {
+    userID = Cookies.get('_id').slice(3, 27);
+} else {
+    userID = Cookies.get('_id');
+}
+
   const [firstName, setFirstName] = useState('');
   
   useEffect(() => {
