@@ -422,17 +422,23 @@ const getRestos = async (req, res) => {
 const searchResto = async (req, res) => {
 
     const searchName = req.query.name;
-
+    console.log(searchName)
   try {
-    // Use a case-insensitive regex to perform the search
-    const regex = new RegExp(searchName, 'i');
-
     // Perform the search in the 'restoName' field
-    const restos = await Resto.find({ restoName: regex });
-
-    res.status(200).json(restos);
+    const restos = await Resto.find({ restoName: {$regex: searchName, $options : 'i'} });
+    
+    // Perform search when restoname is not found
+    if (restos.length === 0) {
+        console.log("resto name not found");
+        
+        const keywordsRestos = await Resto.find({ keywords: { $regex: searchName, $options: 'i' } });
+        res.status(200).json(keywordsRestos);
+      } else {
+        res.status(200).json(restos);
+      }
+    
   } catch (error) {
-    res.status(500).json({ error: 'Failed to search for restaurants' });
+    res.status(500).json({ error: error});
   }
 
 }

@@ -14,32 +14,22 @@ const Home = () => {
     const [restos, setRestos] = useState(null)
     const userId = useState(Cookies.get('_id')) 
     const userType = useState(Cookies.get('userType')) 
-
+    const [firstName, setFirstName] = useState('');
     
-if(Cookies.get('_id') !== '64bdf3eea4354c42f888ec3c'){
-    var userID = Cookies.get('_id').slice(3,27)
-  }
-  else {
-    var userID = Cookies.get('_id')
-  }
-  const [firstName, setFirstName] = useState('');
-  
-  useEffect(() => {
-    
-      axios.get(`http://localhost:4000/api/profile/${userID}`)
-        .then((response) => {
-          setFirstName(response.data.firstName)
-        })
-        .catch((error) => {
-          // Handle any errors that occurred during the request
-          console.error('Error fetching data:', error);
-        });
-  
-  }, []);
-
+// if(Cookies.get('_id') !== null){
+//     if(Cookies.get('_id') !== '64bdf3eea4354c42f888ec3c'){
+//         var userID = Cookies.get('_id').slice(3,27)
+//     }
+//     else {
+//         var userID = Cookies.get('_id')
+//     }
+// }
+// else{
+//     console.log("NO COOKIES!")
+// }
 
     useEffect(() => {
-        
+            
 
         const fecthRestos = async () => {
             const response = await fetch('/api/restos')
@@ -48,7 +38,7 @@ if(Cookies.get('_id') !== '64bdf3eea4354c42f888ec3c'){
 
             if(response.ok){
                 setRestos(json)
-
+                    
             }
 
             
@@ -56,6 +46,29 @@ if(Cookies.get('_id') !== '64bdf3eea4354c42f888ec3c'){
 
         fecthRestos()
     }, [])
+
+
+    useEffect(() => {
+
+        if(Cookies.get('_id') !== '64bdf3eea4354c42f888ec3c'){
+            var userID = Cookies.get('_id').slice(3,27)
+        }
+        else{
+            var userID = Cookies.get('_id')
+        }
+            
+        axios.get(`http://localhost:4000/api/profile/${userID}`)
+            .then((response) => {
+            setFirstName(response.data.firstName)
+            })
+            .catch((error) => {
+            // Handle any errors that occurred during the request
+            console.error('Error fetching data:', error);
+            });
+
+    }, []);
+
+
 
 
     return(
