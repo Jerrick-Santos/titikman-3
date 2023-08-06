@@ -9,7 +9,8 @@ import React, { useState, useEffect } from 'react';
 
     const [userID, setUserID] = useState(props.userIDcookies);
     const navigate = useNavigate();
-  
+    const [searchTerm, setSearchTerm] = useState('');
+
     useEffect(() => {
       if(Cookies.get('_id') == null || Cookies.get('_id') === undefined){
         setUserID(GUEST_USERID)
@@ -33,6 +34,16 @@ import React, { useState, useEffect } from 'react';
     window.location.reload();
   }
 
+  const handleSearchInput = (e) => {
+    setSearchTerm(e.target.value);
+  }
+
+  const handleSearchResto = (e) => {
+    e.preventDefault();
+    navigate(`/resto/search/${searchTerm}`)
+    window.location.reload()
+  }
+
   return (
     <div className="App">
         <nav className="navbar sticky-top px-5 py-3">
@@ -43,11 +54,18 @@ import React, { useState, useEffect } from 'react';
             <Link className="navbar-brand" to="/">Titikman</Link>
 
             <div className="search-bar w-50 me-5">
-                <form className="d-flex" role="search">
-                  <input className="form-control me-1" type="search" placeholder="Search" aria-label="Search"/>
-                  <a className="btn btn-danger" href="searched.html"><img src={search} alt=""/></a>
-                </form>
-            </div>
+              <form className="d-flex" role="search" onSubmit={handleSearchResto}>
+                  <input 
+                  className="form-control me-1" 
+                  type="search" 
+                  placeholder="Search" 
+                  aria-label="Search" 
+                  value={searchTerm}
+                  onChange={handleSearchInput}/>
+                  <button className="btn btn-danger" type="submit"><img src={search} alt="" /></button>
+              </form>
+          </div>
+
 
 
             <span className="navbar-text" id="navbarText">

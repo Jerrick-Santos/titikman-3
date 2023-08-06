@@ -12,7 +12,7 @@ const SignUpForm = () => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [userName, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [plainpassword, setplainPassword] = useState('');
   const [userType, setUserType] = useState('');
   const [error, setError] = useState(null)
   const navigate = useNavigate();
@@ -29,8 +29,8 @@ const SignUpForm = () => {
     setUsername(e.target.value);
   };
 
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
+  const handleplainPasswordChange = (e) => {
+    setplainPassword(e.target.value);
   };
 
   const handleUserTypeChange = (e) => {
@@ -39,7 +39,7 @@ const SignUpForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const signup = {firstName, lastName, userName, password, userType}
+    const signup = {firstName, lastName, userName, plainpassword, userType}
     const response = await fetch('/api/signup', {
       method: "POST",
       body: JSON.stringify(signup),
@@ -56,7 +56,7 @@ const SignUpForm = () => {
       setFirstName('')
       setLastName('')
       setUsername('')
-      setPassword('')
+      setplainPassword('')
       setUserType('')
       setError(null)
       console.log('New User added', json)
@@ -110,11 +110,11 @@ const SignUpForm = () => {
               <div className="row">
                 <div className="input-group mb-3">
                   <input
-                    type="password"
+                    type="plainpassword"
                     className="form-control form-control-lg bg-light fs-6"
-                    placeholder="Password"
-                    value={password}
-                    onChange={handlePasswordChange}
+                    placeholder="plainPassword"
+                    value={plainpassword}
+                    onChange={handleplainPasswordChange}
                   />
                 </div>
               </div>
