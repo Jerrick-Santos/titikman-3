@@ -25,7 +25,6 @@ app.use((req, res, next) => {
     next()
 })
 
-const cors = require('cors');
 
 app.use(cors({
     origin: 'https://titikman.vercel.app', // Allow requests from your frontend domain
