@@ -10,6 +10,7 @@ const LoginForm = () => {
   const userType = useState(Cookies.get('userType')) 
   const [userName, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState(null)
   const navigate = useNavigate();
 
@@ -21,10 +22,14 @@ const LoginForm = () => {
     setPassword(e.target.value);
   };
 
+  const handleCheckboxChange = () => {
+    setRememberMe(!rememberMe);
+};
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Perform any necessary login logic here using the userType, username, and password state variables.
-    const login = {userName, password}
+    const login = {userName, password, rememberMe}
     const response = await fetch('/api/login', {
       method: "POST",
       body: JSON.stringify(login),
@@ -58,6 +63,8 @@ const LoginForm = () => {
             <div className="card-body">
               <h1 className="text-center mt-3 text-danger">Login</h1>
               {error && <p className="text-danger text-center">{error}</p>} {/* Add this line */}
+
+              {/* ACTUAL FORM */}
               <form onSubmit={handleSubmit}>
                 <input
                   type="text"
@@ -75,6 +82,12 @@ const LoginForm = () => {
                   value={password}
                   onChange={handlePasswordChange}
                 />
+                <input
+                  type="checkbox"
+                  checked={rememberMe}
+                  onChange={handleCheckboxChange}
+                />
+                <label>Remember Me</label>
                 <div className="text-center mt-3 mb-2">
                   <button type="submit" className="btn btn-danger">
                     Login
@@ -84,6 +97,8 @@ const LoginForm = () => {
                   New to Titikman? &nbsp;<Link to="/signup">Sign up</Link>
                 </small>
               </form>
+
+
             </div>
           </div>
         </div>

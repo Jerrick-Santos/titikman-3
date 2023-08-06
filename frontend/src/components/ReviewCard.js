@@ -199,7 +199,6 @@ const ReviewCard = (props) => {
   </p>
   <p className="text-content mb-1">
     {isExpanded || props.revContent.length <= 100 ? props.revContent : `${props.revContent.substring(0, 100)}...`}
-    {isExpanded && <span className="hidden-content hide">{props.revContent}</span>}
   </p>
 </div>
     {props.revContent.length > 100 && (

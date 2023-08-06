@@ -5,6 +5,11 @@ import SignUpForm from './pages/SignUp'
 import LoginForm from './pages/LogIn';
 import UserProfile from './pages/UserProfile';
 import RestaurantPage from './pages/RestaurantPage';
+
+import React, { useState, useEffect } from 'react';
+import Cookies from 'js-cookie';
+import SearchResto from './pages/SearchResto';
+
 function App(){
     return(
         <>
@@ -16,6 +21,7 @@ function App(){
                     <Route path="/signup" element={<SignUpForm/>} />
                     <Route path="/profile/:id" element={<UserProfile/>} />
                     <Route path="/resto/:id" element={<RestaurantPage/>} />
+                    <Route path="/resto/search/:searchQuery" element={<SearchResto/>} />
                 </Routes>
             </BrowserRouter>
         </>
