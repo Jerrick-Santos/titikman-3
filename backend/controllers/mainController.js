@@ -38,38 +38,6 @@ const createUser = async (req, res) => {
     }
 }
 
-// const login = async (req, res) => {
-//     const { userName, password, rememberMe } = req.body
-//     console.log("hello")
-//     console.log(rememberMe)
-//     console.log(userName, password)
-//     User.findOne({userName: userName}).then((user) => {
-//         if(user){
-//             if(user.password === password){
-
-//                 if(rememberMe){
-//                     const expiryDate = new Date(Date.now() + 3 * 24 * 60 * 60 * 1000);
-//                     res.cookie('userType', user.userType, { expires: expiryDate });
-//                     res.cookie('_id', user._id, { expires: expiryDate });
-//                     res.cookie('rememberMe', true)
-//                     res.json("Success" + rememberMe);
-//                 }
-//                 else{
-//                     res.cookie('userType', user.userType, { expires: 0 });
-//                     res.cookie('_id', user._id, { expires: 0 });
-//                     res.cookie('rememberMe', false)
-//                     res.json("Success");
-//                     res.json("Success" + rememberMe);
-//                 }
-
-//             } else {
-//                 res.status(401).json("Password Incorrect");
-//             }
-//         } else {
-//             res.status(401).json("No Record Exists");
-//         }
-//     })
-// }
 
 const login = async (req, res) => {
     const { userName, password, rememberMe } = req.body;
@@ -239,15 +207,6 @@ const createReview = async (req, res) => {
         filename=""
     }
 
-    //upload to S3 server
-    // try {
-    //     const s3Response = await uploadFile(req.file)
-    //     filename = s3Response.Location
-    //     console.log(s3Response.Location)
-    // } catch (error) {
-    //     console.error('File not uploaded to S3')
-    // }
-
 
     let { 
             userRating, 
@@ -256,7 +215,7 @@ const createReview = async (req, res) => {
         } = req.body
 
     //get user id via session - insert code here 
-    user = id //remove this when session has been implemented
+    user = id 
     datePosted = new Date()
     likes = 0
     dislikes = 0 
@@ -285,8 +244,6 @@ const createReview = async (req, res) => {
             dislikes,
             hasOwnerResponse,
             revTitle
-            // likedUsers,
-            // dislikedUsers
         })
         
         newReview.save()

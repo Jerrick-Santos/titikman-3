@@ -290,7 +290,7 @@ const ReviewCard = (props) => {
                     
 
                 <div className="container-fluid review-content p-3 bg-light mb-2">
-                {!props.isResponseEdited && (
+                {props.isResponseEdited && (
                   <div className="d-flex justify-content-end"> 
                           <p className="mt-2" style={{  color: "darkgrey", marginLeft: "20px" }}>
                             Edited

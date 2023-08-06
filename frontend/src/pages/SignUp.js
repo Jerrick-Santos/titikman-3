@@ -110,9 +110,9 @@ const SignUpForm = () => {
               <div className="row">
                 <div className="input-group mb-3">
                   <input
-                    type="plainpassword"
+                    type="password"
                     className="form-control form-control-lg bg-light fs-6"
-                    placeholder="plainPassword"
+                    placeholder="Password"
                     value={plainpassword}
                     onChange={handleplainPasswordChange}
                   />
@@ -129,7 +129,6 @@ const SignUpForm = () => {
               >
                 <option value="">Open this select menu</option>
                 <option value="2">Reviewer</option>
-                <option value="3">Owner</option>
               </select>
               <p className="continue justify-content-center">
                 By continuing, you agree to Titikman's Terms of Service and acknowledge Titikman's Privacy Policy
