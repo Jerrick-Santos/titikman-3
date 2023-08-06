@@ -4,6 +4,7 @@ import axios from 'axios';
 import EditUser from '../components/EditUser';
 import Cookies from 'js-cookie';
 import NavBar from '../components/NavBar';
+import UserReviewCard from '../components/UserReviewCard';
 
 const UserProfile = () => {
   if(Cookies.get('_id') !== '64bdf3eea4354c42f888ec3c'){
@@ -153,30 +154,12 @@ const UserProfile = () => {
       console.error('Error creating review:', error);
     }
   };
-  const [expandedReviews, setExpandedReviews] = useState({});
-
-
-  const handleExpand = (reviewId) => {
-    setExpandedReviews((prevExpandedReviews) => ({
-      ...prevExpandedReviews,
-      [reviewId]: !prevExpandedReviews[reviewId],
-    }));
-  };
-
-  useState(() => {
-    const initialExpandedReviews = {};
-    reviewData.forEach((review) => {
-      initialExpandedReviews[review._id] = false;
-    });
-    setExpandedReviews(initialExpandedReviews);
-  }, [reviewData]);
-
   return (
     <>
       <NavBar userIDcookies={userID} userName={navFirstName}/>
       <div className="container">
       <div className="row d-flex">
-        <div className="col-lg-4 mb-4">
+        <div className="col-lg-4 mb-4 d-flex justify-content-between">
           <div className="container-fluid pt-2">
             <div className="row">
               <div className="col-sm-6">
@@ -215,30 +198,15 @@ const UserProfile = () => {
             <div className="row">
               {/* Display user reviews */}
               {reviewData.map((review) => (
-                <div key={review._id} className="col-lg-4 col-md-4 mb-4">
-                  <div className="card">
-                    <div className="card-body">
-                      <h5 className="card-title">{review.userRating}</h5>
-                      <p className="card-text text-content">
-                      {expandedReviews[review._id] ? review.revContent : `${review.revContent.substring(0, 30)}...`}
-                      {expandedReviews[review._id] && <span className="hidden-content hide">{review.revContent}</span>}
-                      </p> 
-                      
-                    </div>
-                    {review.revContent.length > 30 && (
-                  <button
-                    style={{ marginLeft: '10px', width: '40%', fontSize: '12px' }}
-                    onClick={() => handleExpand(review._id)} // Pass the review ID to the handleExpand function
-                    className="expand-link"
-                  >
-                    {expandedReviews[review._id] ? 'Read Less' : 'Read More'} {/* Use the review ID to determine the button text */}
-                  </button>
-                )}
-                  </div>
-                  
-                </div>
+                  <UserReviewCard 
+                  key={review._id}
+                  revTitle={review.revTitle} 
+                  userRating={review.userRating}
+                  restaurantName={review.restaurantName} 
+                  revContent={review.revContent}
+                  initiallyExpanded={false} 
+                  />
               ))}
-
             </div>
           </div>
         </div>
