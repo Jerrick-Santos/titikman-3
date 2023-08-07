@@ -407,12 +407,19 @@ const updateReview = async (req, res) => {
 //get all restos 
 const getRestos = async (req, res) => {
 
+    const cookieOptions = {
+        httpOnly: true, // Prevent client-side JavaScript access
+        secure: true,   // Only send cookies over HTTPS
+        domain: 'https://titikman.vercel.app', // Replace with your actual domain
+      };
+
 
     if(req.cookies._id && req.cookies.userType){
         if(req.cookies._id == process.env.GUEST_USERID && req.cookies.userType == 1){
-            res.cookie('userType', 1);
-            res.cookie('_id', process.env.GUEST_USERID);
-            Cookies.set()
+            res.cookie('userType', 1, cookieOptions);
+            res.cookie('_id', process.env.GUEST_USERID, cookieOptions);
+            Cookies.set('userType', 1);
+            Cookies.set('_id', process.env.GUEST_USERID);
             console.log("Anon User Match")
         }
         else{
