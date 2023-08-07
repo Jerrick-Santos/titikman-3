@@ -36,7 +36,7 @@ const ReviewCard = (props) => {
       // Make an API call to delete the review from the database using the reviewID
 
       console.log('del 1  ' + props.reviewID);
-      await axios.delete(`http://localhost:4000/api/review/${props.restoID}/${props.reviewID}`);
+      await axios.delete(`https://titikman.onrender.com/api/review/${props.restoID}/${props.reviewID}`);
       console.log('del 2 ' + props.reviewID);
       // If the deletion is successful, you can trigger a callback to remove the review from the parent component's state.
      window.location.reload();
@@ -52,7 +52,7 @@ const ReviewCard = (props) => {
     };
 
     try {
-      const response = await axios.patch(`http://localhost:4000/api/review/${props.restoID}/${props.reviewID}`, requestData);
+      const response = await axios.patch(`https://titikman.onrender.com/api/review/${props.restoID}/${props.reviewID}`, requestData);
       window.location.reload();
     } catch (error) {
       console.error('Error editing review:', error);
@@ -112,7 +112,7 @@ const ReviewCard = (props) => {
       // with the new values (likes and dislikes).
       // Replace the following URL and request data with your actual API endpoint and data structure.
       await axios.patch(
-        `http://localhost:4000/api/review/${props.restoID}/${props.reviewID}`,
+        `https://titikman.onrender.com/api/review/${props.restoID}/${props.reviewID}`,
         {
           likes: likes,
           dislikes: dislikes,
@@ -290,7 +290,7 @@ const ReviewCard = (props) => {
                     
 
                 <div className="container-fluid review-content p-3 bg-light mb-2">
-                {!props.isResponseEdited && (
+                {props.isResponseEdited && (
                   <div className="d-flex justify-content-end"> 
                           <p className="mt-2" style={{  color: "darkgrey", marginLeft: "20px" }}>
                             Edited

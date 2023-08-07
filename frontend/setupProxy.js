@@ -4,7 +4,7 @@ module.exports = function(app) {
   app.use(
     '/images',
     createProxyMiddleware({
-      target: 'http://localhost:4000',
+      target: 'https://titikman.vercel.app',
       pathRewrite: {
         '^/images': '',
       },

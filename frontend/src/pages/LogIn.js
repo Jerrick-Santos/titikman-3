@@ -30,7 +30,7 @@ const LoginForm = () => {
     e.preventDefault();
     // Perform any necessary login logic here using the userType, username, and password state variables.
     const login = {userName, password, rememberMe}
-    const response = await fetch('/api/login', {
+    const response = await fetch('https://titikman.onrender.com/api/login', {
       method: "POST",
       body: JSON.stringify(login),
       headers: {

@@ -22,7 +22,7 @@ function EditUser(props) {
       formData.append('image', image);
 
       // Send the updated data to the backend
-      const response = await axios.patch(`http://localhost:4000/api/profile/${userId}`, formData, {
+      const response = await axios.patch(`https://titikman.onrender.com/api/profile/${userId}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

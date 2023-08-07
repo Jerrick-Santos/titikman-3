@@ -1,8 +1,5 @@
 require('dotenv').config()
 const express = require('express')
-const RestoRoutes = require('./routes/resto')
-const ReviewRoutes = require('./routes/review')
-const ImageRoutes = require('./routes/image')
 const MainRoutes = require('./routes/mainRoute')
 const path = require('path')
 const multer  = require('multer')
@@ -28,26 +25,24 @@ app.use((req, res, next) => {
     next()
 })
 
-//MULTER MIDDLEWARE
-app.post('/images', upload.single('image'), (req, res) => {
-    
-})
 
-app.get('/getcookie', (req, res) => {
-    //show the saved cookies
-    console.log(req.cookies)
-    res.send(req.cookies);
-});
+app.use(cors({
+    origin: 'https://titikman.vercel.app', // Allow requests from your frontend domain
+    credentials: true, // Enable sending cookies in cross-origin requests
+}));
+
+
+// app.get('/getcookie', (req, res) => {
+//     //show the saved cookies
+//     console.log(req.cookies)
+//     res.send(req.cookies);
+// });
 
 
 app.use(express.json())
+app.set("trust proxy", 1)
 
-//listen for requests 
 
-//routes
-//app.use('/api/home',RestoRoutes)
-//app.use('/api/reviews', ReviewRoutes)
-// app.use('/images/thumbnail', express.static('images/thumbnail'))
 app.use('/images/thumbnail/:imageName', async (req, res) => {
     const imageName = req.params.imageName;
     const imagePath = `${__dirname}/images/thumbnail/${imageName}`;
