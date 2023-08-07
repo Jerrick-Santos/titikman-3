@@ -7,7 +7,9 @@ const upload = multer({ dest: 'uploads/' })
 const cors = require("cors");
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
-
+const passport = require('passport')
+const passportLocal = require('passport-local')
+const bodyParser = require('body-parser')
 //express app
 const app = express()
 
@@ -25,18 +27,19 @@ app.use((req, res, next) => {
     next()
 })
 
+// app.use(bodyParser.json())
+// app.use(bodyParser.urlencoded({extended: true}))
+// app.use(session({
+//     secret: "secretcode", 
+//     resave: true,
+//     saveUninitialized: true
+// }))
+
 
 app.use(cors({
-    origin: 'https://titikman.vercel.app', // Allow requests from your frontend domain
+    origin: 'https://titikman.onrender.com',
     credentials: true, // Enable sending cookies in cross-origin requests
 }));
-
-
-// app.get('/getcookie', (req, res) => {
-//     //show the saved cookies
-//     console.log(req.cookies)
-//     res.send(req.cookies);
-// });
 
 
 app.use(express.json())
