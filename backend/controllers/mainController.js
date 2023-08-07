@@ -4,6 +4,8 @@ const { MongoClient, ObjectId } = require('mongodb');
 const e = require('express');
 const { uploadFile } = require('../s3')
 const bcrypt = require('bcrypt')
+const cookieParser = require('cookie-parser');
+const jwt = require('jsonwebtoken')
 
 //COOKIES REQUEST
 const getCookies = (req, res) => {
@@ -57,6 +59,11 @@ const login = async (req, res) => {
                 res.cookie('userType', user.userType, { expires: expiryDate });
                 res.cookie('_id', user._id, { expires: expiryDate });
                 res.cookie('rememberMe', rememberMe);
+
+
+                //creare token
+                const token = jwt.sign({_id: user._id}, process.env.TOKEN_SECRET);
+                res.header('auth-token', token).send(token);
 
                 res.json("Success");
             } else {
