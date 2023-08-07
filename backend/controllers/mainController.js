@@ -56,14 +56,18 @@ const login = async (req, res) => {
                     expiryDate = undefined;  // Expire when the browser is closed
                 }
 
-                res.cookie('userType', user.userType, { expires: expiryDate });
-                res.cookie('_id', user._id, { expires: expiryDate });
-                res.cookie('rememberMe', rememberMe);
-
+                // res.cookie('userType', user.userType, { expires: expiryDate });
+                // res.cookie('_id', user._id, { expires: expiryDate });
+                // res.cookie('rememberMe', rememberMe);
 
                 //creare token
                 const token = jwt.sign({_id: user._id}, process.env.TOKEN_SECRET);
-                res.header('auth-token', token).send(token);
+
+                res.cookie("token", token, {
+                    httpOnly: true
+                })
+
+                // res.header('auth-token', token).send(token);
 
                 res.json("Success");
             } else {
