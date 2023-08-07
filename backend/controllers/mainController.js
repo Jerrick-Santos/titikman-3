@@ -410,9 +410,7 @@ const getRestos = async (req, res) => {
     const cookieOptions = {
         httpOnly: true, // Prevent client-side JavaScript access
         secure: true,   // Only send cookies over HTTPS
-        maxAge: oneDay, // Cookie expiration time
         domain: 'https://titikman.vercel.app', // Replace with your actual domain
-        path: '/',      // Cookie path (optional, adjust as needed)
       };
 
 
