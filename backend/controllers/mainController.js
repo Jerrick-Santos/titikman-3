@@ -50,14 +50,8 @@ const login = async (req, res) => {
             const check = await bcrypt.compare(password, user.password)
             console.log(check)
             if (await bcrypt.compare(password, user.password)) {
-                let expiryDate;
-                if (rememberMe) {
-                    expiryDate = new Date(Date.now() + 3 * 7 * 24 * 60 * 60 * 1000);  // 3 weeks expiration
-                } else {
-                    expiryDate = undefined;  // Expire when the browser is closed
-                }
 
-                res.json({ success: true, userId: user._id, expiryDate: expiryDate });
+                res.json({ success: true, userId: user._id, rememberMe: rememberMe });
                 
             } else {
                 res.status(401).json("Password Incorrect");
