@@ -37,7 +37,7 @@ app.use((req, res, next) => {
 
 
 app.use(cors({
-    origin: 'https://titikman.vercel.app',
+    origin: 'https://titikman-3.vercel.app/',
     credentials: true, // Enable sending cookies in cross-origin requests
 }));
 
