@@ -56,22 +56,11 @@ const login = async (req, res) => {
                     expiryDate = undefined;  // Expire when the browser is closed
                 }
 
-                // res.cookie('userType', user.userType, { expires: expiryDate });
-                // res.cookie('_id', user._id, { expires: expiryDate });
-                // res.cookie('rememberMe', rememberMe);
-
-                //creare token
-                const token = jwt.sign({_id: user._id}, process.env.TOKEN_SECRET);
-
-                res.cookie("token", token, {
-                    httpOnly: true
-                })
-
-                // res.header('auth-token', token).send(token);
-
-                res.json("Success");
+                res.json({ success: true, userId: user._id, expiryDate: expiryDate });
+                
             } else {
                 res.status(401).json("Password Incorrect");
+                res.json({ success: false});
             }
         } else {
             res.status(401).json("No Record Exists");
@@ -418,29 +407,32 @@ const updateReview = async (req, res) => {
 //get all restos 
 const getRestos = async (req, res) => {
 
-    const cookieOptions = {
-        httpOnly: true, // Prevent client-side JavaScript access
-        secure: true,   // Only send cookies over HTTPS
-        domain: 'https://titikman.vercel.app', // Replace with your actual domain
-      };
+    // const cookieOptions = {
+    //     httpOnly: true, // Prevent client-side JavaScript access
+    //     secure: true,   // Only send cookies over HTTPS
+    //     domain: 'https://titikman.vercel.app', // Replace with your actual domain
+    //   };
 
 
-    if(req.cookies._id && req.cookies.userType){
-        if(req.cookies._id == process.env.GUEST_USERID && req.cookies.userType == 1){
-            res.cookie('userType', 1, cookieOptions);
-            res.cookie('_id', process.env.GUEST_USERID, cookieOptions);
-            Cookies.set('userType', 1, cookieOptions);
-            Cookies.set('_id', process.env.GUEST_USERID, cookieOptions);
-            console.log("Anon User Match")
-        }
-        else{
-            console.log("Diff User")
-        }
-    }
-    else{
-        res.cookie('userType', 1);
-        res.cookie('_id', process.env.GUEST_USERID);
-    }
+    // if(req.cookies._id && req.cookies.userType){
+    //     if(req.cookies._id == process.env.GUEST_USERID && req.cookies.userType == 1){
+    //         res.cookie('userType', 1, cookieOptions);
+    //         res.cookie('_id', process.env.GUEST_USERID, cookieOptions);
+    //         // Cookies.set('userType', 1, cookieOptions);
+    //         // Cookies.set('_id', process.env.GUEST_USERID, cookieOptions);
+    //         console.log("Anon User Match")
+    //     }
+    //     else{
+    //         console.log("Diff User")
+    //     }
+    // }
+    // else{
+    //     res.cookie('userType', 1);
+    //     res.cookie('_id', process.env.GUEST_USERID);
+    //     // Cookies.set('userType', 1, cookieOptions);
+    //     // Cookies.set('_id', process.env.GUEST_USERID, cookieOptions);
+    //     Cookies.set('tEST', "COOKIE TEST",);
+    // }
 
 
 
