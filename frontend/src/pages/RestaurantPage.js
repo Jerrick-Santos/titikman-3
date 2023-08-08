@@ -19,13 +19,15 @@ const RestaurantPage = () => {
 const { id } = useParams();
 var restoID = id
 
-if(Cookies.get('_id') !== '64bdf3eea4354c42f888ec3c'){
-  var userID = Cookies.get('_id').slice(3,27)
-  //console.log("GUDS")
-}
-else {
-  var userID = Cookies.get('_id')
-}
+// if(Cookies.get('_id') !== '64bdf3eea4354c42f888ec3c'){
+//   var userID = Cookies.get('_id').slice(3,27)
+//   //console.log("GUDS")
+// }
+// else {
+//   var userID = Cookies.get('_id')
+// }
+
+var userID = Cookies.get('_id')
 const [firstName, setFirstName] = useState('');
 
 useEffect(() => {

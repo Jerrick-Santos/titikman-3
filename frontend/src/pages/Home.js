@@ -64,8 +64,8 @@ const Home = () => {
     useEffect(() => {
 
         if(Cookies.get('_id') !== '64bdf3eea4354c42f888ec3c' && Cookies.get('_id') !== undefined){
-            var userID = Cookies.get('_id').slice(3,27)
-            setUserID(Cookies.get('_id').slice(3,27))
+            var userID = Cookies.get('_id')
+            setUserID(Cookies.get('_id'))
         }
         else if (Cookies.get('_id') !== undefined){
             var userID = Cookies.get('_id')

@@ -84,7 +84,7 @@ import React, { useState, useEffect } from 'react';
                     
                   </button>
                   <ul className="dropdown-menu">
-                    <li><button onClick={handleReload} className="dropdown-item"><Link to={`/profile/${userID.slice(3, 27)}`}>See Profile</Link></button></li>
+                    <li><button onClick={handleReload} className="dropdown-item"><Link to={`/profile/${userID}`}>See Profile</Link></button></li>
                     <li><button onClick={handleLogout} className="dropdown-item">Log Out</button></li>
                   </ul>
                 </>

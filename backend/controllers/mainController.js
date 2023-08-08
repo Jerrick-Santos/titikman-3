@@ -27,10 +27,11 @@ const createUser = async (req, res) => {
         newUser = new User({firstName, lastName, userName, password, bio, icon, userType})
         const savedUser = await newUser.save();
 
-        res.cookie('userType', savedUser.userType, { expires: undefined });
-        res.cookie('_id', savedUser._id, { expires: undefined });
-        res.cookie('rememberMe', false)
+        // res.cookie('userType', savedUser.userType, { expires: undefined });
+        // res.cookie('_id', savedUser._id, { expires: undefined });
+        // res.cookie('rememberMe', false)
 
+        res.json({ success: true, userId: savedUser.userType});
         console.log('New user saved to MongoDB:', savedUser);
         res.status(200).json({newUser})
         

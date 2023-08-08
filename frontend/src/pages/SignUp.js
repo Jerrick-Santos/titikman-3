@@ -53,6 +53,8 @@ const SignUpForm = () => {
       setError(json.error)
     }
     if (response.ok) {
+      console.log(json.userId)
+      Cookies.set('_id', json.userId, { expires: undefined });
       setFirstName('')
       setLastName('')
       setUsername('')
