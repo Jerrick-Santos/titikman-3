@@ -49,6 +49,7 @@ const ReviewCard = (props) => {
     
     const requestData = {
       hasOwnerResponse: false,
+      isResponseEdited: false
     };
 
     try {
