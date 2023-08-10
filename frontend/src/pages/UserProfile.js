@@ -7,12 +7,15 @@ import NavBar from '../components/NavBar';
 import UserReviewCard from '../components/UserReviewCard';
 
 const UserProfile = () => {
-  if(Cookies.get('_id') !== '64bdf3eea4354c42f888ec3c'){
-    var userID = Cookies.get('_id').slice(3,27)
-  }
-  else {
-    var userID = Cookies.get('_id')
-  }
+// if(Cookies.get('_id') !== '64bdf3eea4354c42f888ec3c'){
+//   var userID = Cookies.get('_id').slice(3,27)
+//   //console.log("GUDS")
+// }
+// else {
+//   var userID = Cookies.get('_id')
+// }
+
+var userID = Cookies.get('_id')
 
   const [navFirstName, setNavFirstName] = useState('');
 

@@ -40,6 +40,15 @@ const LoginForm = () => {
 
     if (response.ok) {
       const json = await response.json();
+      console.log(json.userId)
+
+      if(json.rememberMe){
+        Cookies.set('_id', json.userId, { expires: new Date(Date.now() + 1814400000) });
+      }
+      else{
+        Cookies.set('_id', json.userId, { expires: undefined });
+      }
+      
       setUsername('');
       setPassword('');
       setError(null);

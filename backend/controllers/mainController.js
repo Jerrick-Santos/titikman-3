@@ -4,6 +4,8 @@ const { MongoClient, ObjectId } = require('mongodb');
 const e = require('express');
 const { uploadFile } = require('../s3')
 const bcrypt = require('bcrypt')
+const cookieParser = require('cookie-parser');
+const jwt = require('jsonwebtoken')
 
 //COOKIES REQUEST
 const getCookies = (req, res) => {
@@ -25,10 +27,11 @@ const createUser = async (req, res) => {
         newUser = new User({firstName, lastName, userName, password, bio, icon, userType})
         const savedUser = await newUser.save();
 
-        res.cookie('userType', savedUser.userType, { expires: undefined });
-        res.cookie('_id', savedUser._id, { expires: undefined });
-        res.cookie('rememberMe', false)
+        // res.cookie('userType', savedUser.userType, { expires: undefined });
+        // res.cookie('_id', savedUser._id, { expires: undefined });
+        // res.cookie('rememberMe', false)
 
+        res.json({ success: true, userId: savedUser._id});
         console.log('New user saved to MongoDB:', savedUser);
         res.status(200).json({newUser})
         
@@ -47,20 +50,12 @@ const login = async (req, res) => {
             const check = await bcrypt.compare(password, user.password)
             console.log(check)
             if (await bcrypt.compare(password, user.password)) {
-                let expiryDate;
-                if (rememberMe) {
-                    expiryDate = new Date(Date.now() + 3 * 7 * 24 * 60 * 60 * 1000);  // 3 weeks expiration
-                } else {
-                    expiryDate = undefined;  // Expire when the browser is closed
-                }
 
-                res.cookie('userType', user.userType, { expires: expiryDate });
-                res.cookie('_id', user._id, { expires: expiryDate });
-                res.cookie('rememberMe', rememberMe);
-
-                res.json("Success");
+                res.json({ success: true, userId: user._id, rememberMe: rememberMe });
+                
             } else {
                 res.status(401).json("Password Incorrect");
+                res.json({ success: false});
             }
         } else {
             res.status(401).json("No Record Exists");
@@ -407,29 +402,32 @@ const updateReview = async (req, res) => {
 //get all restos 
 const getRestos = async (req, res) => {
 
-    const cookieOptions = {
-        httpOnly: true, // Prevent client-side JavaScript access
-        secure: true,   // Only send cookies over HTTPS
-        domain: 'https://titikman.vercel.app', // Replace with your actual domain
-      };
+    // const cookieOptions = {
+    //     httpOnly: true, // Prevent client-side JavaScript access
+    //     secure: true,   // Only send cookies over HTTPS
+    //     domain: 'https://titikman.vercel.app', // Replace with your actual domain
+    //   };
 
 
-    if(req.cookies._id && req.cookies.userType){
-        if(req.cookies._id == process.env.GUEST_USERID && req.cookies.userType == 1){
-            res.cookie('userType', 1, cookieOptions);
-            res.cookie('_id', process.env.GUEST_USERID, cookieOptions);
-            Cookies.set('userType', 1);
-            Cookies.set('_id', process.env.GUEST_USERID);
-            console.log("Anon User Match")
-        }
-        else{
-            console.log("Diff User")
-        }
-    }
-    else{
-        res.cookie('userType', 1);
-        res.cookie('_id', process.env.GUEST_USERID);
-    }
+    // if(req.cookies._id && req.cookies.userType){
+    //     if(req.cookies._id == process.env.GUEST_USERID && req.cookies.userType == 1){
+    //         res.cookie('userType', 1, cookieOptions);
+    //         res.cookie('_id', process.env.GUEST_USERID, cookieOptions);
+    //         // Cookies.set('userType', 1, cookieOptions);
+    //         // Cookies.set('_id', process.env.GUEST_USERID, cookieOptions);
+    //         console.log("Anon User Match")
+    //     }
+    //     else{
+    //         console.log("Diff User")
+    //     }
+    // }
+    // else{
+    //     res.cookie('userType', 1);
+    //     res.cookie('_id', process.env.GUEST_USERID);
+    //     // Cookies.set('userType', 1, cookieOptions);
+    //     // Cookies.set('_id', process.env.GUEST_USERID, cookieOptions);
+    //     Cookies.set('tEST', "COOKIE TEST",);
+    // }
 
 
 
