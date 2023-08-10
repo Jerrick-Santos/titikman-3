@@ -9,6 +9,7 @@ import RestaurantPage from './pages/RestaurantPage';
 import React, { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 import SearchResto from './pages/SearchResto';
+import Footer from './components/Footer';
 
 function App(){
     return(
@@ -24,6 +25,8 @@ function App(){
                     <Route path="/resto/search/:searchQuery" element={<SearchResto/>} />
                 </Routes>
             </BrowserRouter>
+
+            <Footer/>
         </>
     )
 }
