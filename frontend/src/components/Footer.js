@@ -7,8 +7,8 @@ import React, { useState, useEffect } from 'react';
 const Footer = () => {
     return (
         
-        <div class="container px-1" id="footer">
-        <footer class="row row-cols-3 py-2 my-2 border-top">
+        <div class="container-fluid p-5" id="footer">
+        <footer class="row row-cols-4 py-2 my-2 border-top d-flex justify-content-between">
             <div class="col">
             <h2>
             Titikman
@@ -37,6 +37,12 @@ const Footer = () => {
                 <li class="nav-item mb-2">cors</li>
                 <li class="nav-item mb-2">dotenv</li>
                 <li class="nav-item mb-2">express-session</li>
+            </ul>
+            </div>
+
+            <div class="col">
+            <h5>Backend Packages</h5>
+            <ul class="nav flex-column">
                 <li class="nav-item mb-2">mongoose</li>
                 <li class="nav-item mb-2">multer</li>
                 <li class="nav-item mb-2">path</li>
